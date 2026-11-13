@@ -10,7 +10,7 @@ import httpx
 mcp = MCPServer("GetWeatherFromSkjern")
 
 # restionio server from KNP
-BASE_URL = os.getenv("KNP_SERVER_URL", "http://127.0.0.1:8080")
+BASE_URL = "http://host.docker.internal:8080"
 
 #create tooL
 @mcp.tool()
@@ -85,4 +85,4 @@ def InsertNewWeatherMeasurement(data: dict) -> str:
         return f"Fejl: {type(e).__name__}: {e}"
 
 if __name__ == '__main__':
-    mcp.run(transport="sse", host="127.0.0.1", port=8000)
+    mcp.run(transport="sse", host="0.0.0.0", port=8000)
