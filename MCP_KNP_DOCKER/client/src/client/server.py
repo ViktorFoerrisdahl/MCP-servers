@@ -1,18 +1,15 @@
-#imports
-from mcp.server.mcpserver import MCPServer
-import json
+# imports
 import requests
-import os
-import logging
-import httpx
+from mcp.server.mcpserver import MCPServer
 
-#server created
+# server created
 mcp = MCPServer("GetWeatherFromSkjern")
 
 # restionio server from KNP
 BASE_URL = "http://host.docker.internal:8080"
 
-#create tooL
+
+# create tooL
 @mcp.tool()
 def getLatestThreeWeather() -> dict:
     """
@@ -28,6 +25,7 @@ def getLatestThreeWeather() -> dict:
     response = requests.get(f"{BASE_URL}/weather/latest", timeout=5)
 
     return response.json()
+
 
 @mcp.tool()
 def getWeahterWithSpecificID(weather_id: int) -> dict:
@@ -81,8 +79,9 @@ def InsertNewWeatherMeasurement(data: dict) -> str:
 
         return f"{response.status_code}: {response.text}"
 
-    except Exception as e:
+    except requests.RequestException as e:
         return f"Fejl: {type(e).__name__}: {e}"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     mcp.run(transport="streamable-http", host="0.0.0.0", port=8000)
